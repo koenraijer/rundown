@@ -8,6 +8,8 @@ let acc_token;
 let expires_at;
 let time_left;
 
+import {token} from '$lib/stores'
+
 export async function get({ url }) {
     let params = url.href.toString().split('?')[1]; // split creates an array of 2 strings, and we need the string at index [1]
     const code = new URLSearchParams(params).get('code')
@@ -40,8 +42,10 @@ export async function get({ url }) {
       expires_at = Date.now() + (expires_in * 1000) // expires_in is in seconds, while Date.now() is in milliseconds
 
       return {
-          headers: { Location: '/'},
-          status: 302,
+          headers: { 
+            Location: '/',
+            },
+          status: 303,
           body: {access_token: acc_token, expires_in: expires_in, refresh_token: refresh_token }
       }   
 }

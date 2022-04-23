@@ -1,3 +1,4 @@
+<!--
 <script context="module">
     let song;
 
@@ -25,6 +26,7 @@
     }
 
 </script>
+-->
 
 <script>
     import NowPlaying from "$lib/components/NowPlaying.svelte";

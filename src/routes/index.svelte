@@ -72,7 +72,7 @@
     // Authorization Code Flow
     const AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize'
     const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID
-    const redirect_uri = "http://localhost:3000/login" // Don't use trailing slash
+    const redirect_uri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI // Don't use trailing slash
     const scope = 'user-read-currently-playing user-top-read'
 
     let remember_me = false;

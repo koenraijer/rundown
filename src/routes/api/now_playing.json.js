@@ -1,12 +1,17 @@
+const client_id = import.meta.env.SPOTIFY_CLIENT_ID;
+const client_secret = import.meta.env.SPOTIFY_CLIENT_SECRET;
+const refresh_token = import.meta.env.SPOTIFY_REFRESH_TOKEN;
+const redirect_uri = "http://localhost:3000/"
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
-const redirect_uri = "https://rundown-ruddy.vercel.app"
+const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks`;
+const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 
 export async function get() {
-  const {access_token, expires_in, expires_at} = await fetch(redirect_uri).then(res => res.json())
+  const {token} = await fetch('https://www.koenraijer.io/api/access_token.json').then(res => res.json())
   
   const res = await fetch(NOW_PLAYING_ENDPOINT, {
     headers: {
-    Authorization: `Bearer ${access_token}`
+    Authorization: `Bearer ${token}`
     }
   })
   

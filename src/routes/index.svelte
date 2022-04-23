@@ -1,15 +1,38 @@
+<!--
+<script context="module">
+    let song;
+
+    export const load = async ({fetch, params}) => {
+        song = await fetch('./api/now_playing.json').then(res => res.json())
+        
+        const type = 'tracks'
+        const limit = 20;
+        const time_range = 'medium_term'
+
+        const data = await fetch('./api/data.json', {
+            method: 'POST',
+            body: new URLSearchParams({
+                type,
+                limit: limit.toString(),  
+                time_range,
+            }).toString()
+        }).then(res => res.json()).then(res => {
+            res.data.items
+        })
+        
+        return {
+            props: {song, data}
+        }
+    }
+
+</script>
+-->
+
 <script>
     import NowPlaying from "$lib/components/NowPlaying.svelte";
     export let song;
     export let data;
-    export let access_token;
-    export let expires_in;
-    export let expires_at
-    import {auth} from '$lib/stores'
 
-    $auth.access_token = access_token
-    $auth.expires_in = expires_in
-    $auth.expires_at = expires_at
 
     let limit = 20;
     let type = 'tracks';
@@ -23,7 +46,6 @@
                 type,
                 limit: limit.toString(),  
                 time_range,
-                access_token,
             }).toString()
         }).then(res => res.json()).then(res => res.data.items)
 
@@ -50,7 +72,7 @@
     // Authorization Code Flow
     const AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize'
     const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID
-    const redirect_uri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI // Don't use trailing slash
+    const redirect_uri = "http://localhost:3000/login" // Don't use trailing slash
     const scope = 'user-read-currently-playing user-top-read'
 
     let remember_me = false;
@@ -75,7 +97,7 @@
         state: generateRandomString(16)
     })
 
-    $: url = AUTHORIZE_ENDPOINT + "?" + params_obj.toString()
+    $: url = AUTHORIZE_ENDPOINT + "?" + params_obj
 
 </script>
 
@@ -124,14 +146,11 @@
     </div>
     <div class="col-span-2">    
         <ol class="list-decimal">
-            <!--
             {#await getData()}
             <li class="flex flex-col flex-nowrap justify-between py-4 text-xl">
                 Loading ...
             </li>
-            {:then} 
-            -->
-            {#if data}
+            {:then}    
             {#each data as track, index}
                 <li class="flex flex-col flex-nowrap justify-between py-4">
                     <a class="font-bold text-xl" href={track.external_urls.spotify} rel="noopener noreferrer" target="_blank">{index + 1}. {track.name}</a> 
@@ -146,8 +165,7 @@
                 </li>
                 <hr>
             {/each}
-            {/if}
-            <!--{/await}-->
+            {/await}
         </ol>
     </div>
 </div>

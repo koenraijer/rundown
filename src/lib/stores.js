@@ -1,11 +1,5 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
-export const auth = writable({
-    access_token: "",
-    expires_in: "",
-    expires_at: "",
+export const token = writable({
+    access_token: "access_token",
 })
-
-export const url = writable(
-    "https://rundown-ruddy.vercel.app"
-)

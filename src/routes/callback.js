@@ -40,7 +40,8 @@ export async function get({ url }) {
       expires_at = Date.now() + (expires_in * 1000) // expires_in is in seconds, while Date.now() is in milliseconds
 
       return {
-          status: 200,
+          headers: {Location: '/'},
+          status: 302,
           body: {access_token: acc_token, expires_in: expires_in, expires_at: expires_at }
       }   
 }

@@ -1,6 +1,5 @@
-
 const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/`;
-const redirect_uri = "http://localhost:3000/login"
+const redirect_uri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI
 
 export async function post({ request }) {
     const {access_token, expires_in, expires_at} = await fetch(redirect_uri).then(res => res.json())

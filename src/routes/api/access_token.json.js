@@ -1,7 +1,8 @@
 const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const client_secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 const refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
-const redirect_uri = "http://localhost:3000/"
+const redirect_uri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI
+
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 let token;
 let expires_at;

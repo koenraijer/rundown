@@ -1,7 +1,7 @@
 <script context="module">
     let song;
 
-    export const load = async ({fetch}) => {
+    export const load = async ({fetch, params}) => {
         song = await fetch('./api/now_playing.json').then(res => res.json())
         
         const type = 'tracks'
@@ -18,7 +18,7 @@
         }).then(res => res.json()).then(res => {
             res.data.items
         })
-
+        
         return {
             props: {song, data}
         }
@@ -36,7 +36,7 @@
     let type = 'tracks';
     let time_range = 'medium_term';
     let show_artist = false;
-
+    
     async function getData() {
         data = await fetch('./api/data.json', {
             method: 'POST',
@@ -61,9 +61,41 @@
         song = await fetch('../api/now_playing.json').then(res => res.json())
     }
 
+    /*
     setInterval(() => {
         getNowPlaying();
     }, 5000);
+    */
+
+    // Authorization Code Flow
+    const AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize'
+    const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID
+    const redirect_uri = "http://localhost:3000/login" // Don't use trailing slash
+    const scope = 'user-read-currently-playing user-top-read'
+
+    let remember_me = false;
+    
+    function generateRandomString(length) {
+        let text = "";
+        const possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    }
+
+   // @ts-ignore
+     $: params_obj = new URLSearchParams({
+        client_id,
+        response_type: 'code',
+        redirect_uri,
+        scope,
+        show_dialog: !remember_me,
+        state: generateRandomString(16)
+    })
+
+    $: url = AUTHORIZE_ENDPOINT + "?" + params_obj
 
 </script>
 
@@ -71,9 +103,18 @@
     <div class="col-span-1">
         <h1 class="text-6xl mb-2 font-bold ">Rundown</h1>
         <h2 class="text-2xl mb-2">Wrapped with no crap</h2>
-        <div class="w-fit my-4">
+        <p class="text-gray-500">Built with SvelteKit and deployed on Vercel, this app exists to hand you the facts.</p>
+        <div class="my-12 mx-0 w-fit">
+            <div class="flex flex-row justify-end">
+                <label for="remember_me">Remember me?</label>
+                <input name="remember-me" type="checkbox" bind:checked={remember_me} />
+            </div>
+            <a href={url} class="btn btn-neutral">Connect Spotify</a>
+        </div> 
+        <div class="my-12 mx-0 w-full">
+            <h2 class="card-title mb-4">Now playing</h2>
             <NowPlaying song={song}/>
-        </div>    
+        </div> 
         <div class="my-12 mx-0 w-full">
             <h2 class="card-title">Your wishes</h2>
             <select bind:value={type} name="type" id="type" class="select select-bordered select-sm w-full max-w-xs my-4">

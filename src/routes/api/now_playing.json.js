@@ -6,7 +6,7 @@ export async function get() {
   
   const res = await fetch(NOW_PLAYING_ENDPOINT, {
     headers: {
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${access_token}`
     }
   })
   

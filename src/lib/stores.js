@@ -5,3 +5,7 @@ export const auth = writable({
     expires_in: "",
     expires_at: "",
 })
+
+export const url = writable(
+    "https://rundown-ruddy.vercel.app"
+)

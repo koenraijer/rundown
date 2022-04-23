@@ -1,5 +1,5 @@
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
-const redirect_uri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI
+const redirect_uri = "https://rundown-ruddy.vercel.app"
 
 export async function get() {
   const {access_token, expires_in, expires_at} = await fetch(redirect_uri).then(res => res.json())

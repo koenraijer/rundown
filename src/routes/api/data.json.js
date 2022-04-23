@@ -1,5 +1,5 @@
 const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/`;
-const redirect_uri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI
+const redirect_uri = "https://rundown-ruddy.vercel.app"
 
 export async function post({ request }) {
     // const {access_token, expires_in, expires_at} = await fetch(redirect_uri).then(res => res.json())

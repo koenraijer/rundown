@@ -15,7 +15,9 @@
                 limit: limit.toString(),  
                 time_range,
             }).toString()
-        }).then(res => res.json()).then(res => res.data.items)
+        }).then(res => res.json()).then(res => {
+            res.data.items
+        })
 
         return {
             props: {song, data}
@@ -33,6 +35,7 @@
     let limit = 20;
     let type = 'tracks';
     let time_range = 'medium_term';
+    let show_artist = false;
 
     async function getData() {
         data = await fetch('./api/data.json', {
@@ -48,7 +51,19 @@
         limit = limit;
         type = type;
         time_range = time_range
+        if(type === "tracks")
+            show_artist = true
+        else if(type === "artists")
+            show_artist = false
     }
+
+    async function getNowPlaying() {
+        song = await fetch('../api/now_playing.json').then(res => res.json())
+    }
+
+    setInterval(() => {
+        getNowPlaying();
+    }, 5000);
 
 </script>
 
@@ -86,23 +101,28 @@
             <button class="btn btn-disabled">Export to CSV</button>
         </div>   
     </div>
-    <div class="col-span-2">        
+    <div class="col-span-2">    
         <ol class="list-decimal">
+            {#await getData()}
+            <li class="flex flex-col flex-nowrap justify-between py-4 text-xl">
+                Loading ...
+            </li>
+            {:then}    
             {#each data as track, index}
                 <li class="flex flex-col flex-nowrap justify-between py-4">
                     <a class="font-bold text-xl" href={track.external_urls.spotify} rel="noopener noreferrer" target="_blank">{index + 1}. {track.name}</a> 
-                    {#key data}
-                    {#if type === "tracks"}
+                    {#if show_artist}
                     <span class="inline">
                         {#each track.artists as artist, index}
                             {artist.name}{#if track.artists.length > 1 && track.artists.length !== index + 1},&nbsp;{/if} 
                         {/each}
                     </span>
                     {/if}
-                    {/key}
+
                 </li>
                 <hr>
             {/each}
+            {/await}
         </ol>
     </div>
 </div>

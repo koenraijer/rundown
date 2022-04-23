@@ -1,3 +1,5 @@
+// Server-side redirects: https://dev.to/danawoodman/how-to-redirect-in-sveltekit-endpoints-1im3
+
 const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const client_secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 const redirect_uri = "http://localhost:3000/login"
@@ -14,7 +16,7 @@ export async function get({ url }) {
     if(acc_token && expires_at > Date.now()) {
       return {
           status: 200,
-          body: {acc_token, time_left}
+          body: {access_token: acc_token, expires_in: time_left, expires_at: expires_at}
       }
     }
 
@@ -38,7 +40,8 @@ export async function get({ url }) {
       expires_at = Date.now() + (expires_in * 1000) // expires_in is in seconds, while Date.now() is in milliseconds
 
       return {
-          status: 200,
+          headers: { Location: '/'},
+          status: 302,
           body: {access_token: acc_token, expires_in: expires_in, refresh_token: refresh_token }
       }   
 }

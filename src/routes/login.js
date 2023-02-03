@@ -8,8 +8,6 @@ let acc_token;
 let expires_at;
 let time_left;
 
-import {token} from '$lib/stores'
-
 export async function get({ url }) {
     let params = url.href.toString().split('?')[1]; // split creates an array of 2 strings, and we need the string at index [1]
     const code = new URLSearchParams(params).get('code')
